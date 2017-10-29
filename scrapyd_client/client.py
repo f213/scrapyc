@@ -18,18 +18,33 @@ class ScrapydClient:
             self.auth = None
 
     def list_projects(self) -> Generator[str, None, None]:
+        """List projects uploaded to scrapyd"""
         response = self.get('listprojects')
         self._assert_status_is_ok(response)
         for project in response.get('projects', []):
             yield project
 
+    def list_spiders(self, project: str) -> Generator[str, None, None]:
+        """List spiders for a project"""
+        response = self.get('listspiders', project=project)
+
+        try:
+            self._assert_status_is_ok(response)
+        except exceptions.ScrapydClientResponseNotOKException as e:
+            if 'no active project' in str(e):
+                raise exceptions.ScrapyClientProjectDoesNotExist('Project %s does not exist' % project)
+            raise
+
+        for spider in response.get('spiders', []):
+            yield spider
+
     def _format_url(self, endpoint: str) -> str:
         """Append the API host"""
         return (self.host + '/%s.json' % endpoint).replace('//', '/').replace(':/', '://')
 
-    def get(self, url: str) -> dict:
+    def get(self, url: str, **kwargs) -> dict:
         """Do a GET request"""
-        r = requests.get(self._format_url(url), auth=self.auth, timeout=TIMEOUT)
+        r = requests.get(self._format_url(url), auth=self.auth, params=kwargs, timeout=TIMEOUT)
         self._assert_response_is_ok(r, 200)
 
         return r.json()
@@ -50,6 +65,8 @@ class ScrapydClient:
             raise exceptions.ScrapydClientHTTPException('Got response code %d, expected %d, error: %s' % (response.status_code, expected_status_code, response.text))
 
     def _assert_status_is_ok(self, response: dict):
-        print(response)
-        if 'status' not in response.keys() or response['status'] != 'ok':
+        if 'status' not in response.keys():
             raise exceptions.ScrapydClientResponseNotOKException('Got bad server response: %s' % response)
+
+        if response['status'] != 'ok':
+            raise exceptions.ScrapydClientResponseNotOKException('Got non-ok server response: %s' % response.get('message', '<empty>'))

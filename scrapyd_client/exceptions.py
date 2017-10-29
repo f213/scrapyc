@@ -8,6 +8,10 @@ class ScrapydClientResponseNotOKException(ScrapydClientException):
     pass
 
 
+class ScrapyClientProjectDoesNotExist(ScrapydClientException):
+    pass
+
+
 class ScrapydClientHTTPException(ScrapydClientException):
     """Basic HTTP exception"""
     pass

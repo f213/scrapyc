@@ -1,0 +1,8 @@
+{
+  "node_name": "8f3b385b77dc",
+  "spiders": [
+    "spider1",
+    "spider2"
+  ],
+  "status": "ok"
+}
