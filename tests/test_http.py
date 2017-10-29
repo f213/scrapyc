@@ -12,9 +12,14 @@ def test_format_url(input, formatted, client: ScrapydClient):
     assert client._format_url(input) == formatted
 
 
-def test_get_ok(mocked_http_client: ScrapydClient):
+def test_get(mocked_http_client: ScrapydClient):
     mocked_http_client.m.get('https://api.host.com:6800/schedule.json', json={'status': 'ok'})
     assert mocked_http_client.get('schedule') == {'status': 'ok'}
+
+
+def test_post(mocked_http_client: ScrapydClient):
+    mocked_http_client.m.post('https://api.host.com:6800/schedule.json', json={'status': 'ok'}, status_code=299)
+    assert mocked_http_client.post('schedule', data={'have': 'SPAM'}, expected_status_code=299) == {'status': 'ok'}
 
 
 def test_http_auth(mocked_http_client: ScrapydClient):

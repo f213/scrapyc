@@ -15,14 +15,21 @@ class ScrapydClient:
         else:
             self.auth = None
 
-    def _format_url(self, endpoint):
+    def _format_url(self, endpoint: str) -> str:
         """Append the API host"""
         return (self.host + '/%s.json' % endpoint).replace('//', '/').replace(':/', '://')
 
-    def get(self, url):
+    def get(self, url: str) -> dict:
         """Do a GET request"""
         r = requests.get(self._format_url(url), auth=self.auth, timeout=TIMEOUT)
         self._check_response(r, 200)
+
+        return r.json()
+
+    def post(self, url: str, data: dict, expected_status_code=200) -> dict:
+        """Do a POST request"""
+        r = requests.post(self._format_url(url), data=data, auth=self.auth, timeout=TIMEOUT)
+        self._check_response(r, expected_status_code)
 
         return r.json()
 
