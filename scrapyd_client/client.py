@@ -30,9 +30,9 @@ class ScrapydClient:
 
         try:
             self._assert_status_is_ok(response)
-        except exceptions.ScrapydClientResponseNotOKException as e:
+        except exceptions.ResponseNotOKException as e:
             if 'no active project' in str(e):
-                raise exceptions.ScrapyClientProjectDoesNotExist('Project %s does not exist' % project)
+                raise exceptions.ProjectDoesNotExist('Project %s does not exist' % project)
             raise
 
         for spider in response.get('spiders', []):
@@ -59,14 +59,14 @@ class ScrapydClient:
     def _assert_response_is_ok(self, response, expected_status_code):
         """Check sever response and raise exception if it is bad"""
         if response.status_code == 401:
-            raise exceptions.ScrapydUnAuthorizedException()
+            raise exceptions.UnAuthorizedException()
 
         if response.status_code != expected_status_code:
-            raise exceptions.ScrapydClientHTTPException('Got response code %d, expected %d, error: %s' % (response.status_code, expected_status_code, response.text))
+            raise exceptions.HTTPException('Got response code %d, expected %d, error: %s' % (response.status_code, expected_status_code, response.text))
 
     def _assert_status_is_ok(self, response: dict):
         if 'status' not in response.keys():
-            raise exceptions.ScrapydClientResponseNotOKException('Got bad server response: %s' % response)
+            raise exceptions.ResponseNotOKException('Got bad server response: %s' % response)
 
         if response['status'] != 'ok':
-            raise exceptions.ScrapydClientResponseNotOKException('Got non-ok server response: %s' % response.get('message', '<empty>'))
+            raise exceptions.ResponseNotOKException('Got non-ok server response: %s' % response.get('message', '<empty>'))

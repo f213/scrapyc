@@ -3,20 +3,20 @@ class ScrapydClientException(BaseException):
     pass
 
 
-class ScrapydClientResponseNotOKException(ScrapydClientException):
+class ResponseNotOKException(ScrapydClientException):
     """Non-ok JSON response from the server"""
     pass
 
 
-class ScrapyClientProjectDoesNotExist(ScrapydClientException):
+class ProjectDoesNotExist(ScrapydClientException):
     pass
 
 
-class ScrapydClientHTTPException(ScrapydClientException):
+class HTTPException(ScrapydClientException):
     """Basic HTTP exception"""
     pass
 
 
-class ScrapydUnAuthorizedException(ScrapydClientHTTPException):
+class UnAuthorizedException(HTTPException):
     """Bad auth credentials exception"""
     pass

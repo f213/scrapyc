@@ -49,11 +49,11 @@ def test_no_http_auth(mocked_http_client: ScrapydClient, monkeypatch):
 
 def test_unauthorized(mocked_http_client: ScrapydClient):
     mocked_http_client.m.get('https://api.host.com:6800/schedule.json', status_code=401)
-    with pytest.raises(exceptions.ScrapydUnAuthorizedException):
+    with pytest.raises(exceptions.UnAuthorizedException):
         mocked_http_client.get('schedule')
 
 
 def test_bad_server_response(mocked_http_client: ScrapydClient):
     mocked_http_client.m.get('https://api.host.com:6800/schedule.json', status_code=502)
-    with pytest.raises(exceptions.ScrapydClientHTTPException):
+    with pytest.raises(exceptions.HTTPException):
         mocked_http_client.get('schedule')
