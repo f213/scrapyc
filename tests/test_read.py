@@ -1,6 +1,6 @@
 import pytest
 
-from scrapyd_client import ScrapydClient, exceptions
+from scrapyc import ScrapydClient, exceptions
 
 
 def test_list_projects(mocked_http_client: ScrapydClient, response):

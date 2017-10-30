@@ -5,7 +5,7 @@ import pytest
 import requests_mock
 import simplejson as json
 
-from scrapyd_client import ScrapydClient
+from scrapyc import ScrapydClient
 
 
 @pytest.fixture

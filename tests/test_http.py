@@ -1,6 +1,6 @@
 import pytest
 
-from scrapyd_client import ScrapydClient, exceptions
+from scrapyc import ScrapydClient, exceptions
 
 
 @pytest.mark.parametrize('input, formatted', [
