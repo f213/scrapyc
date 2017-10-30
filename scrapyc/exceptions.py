@@ -12,6 +12,10 @@ class ProjectDoesNotExist(ScrapydClientException):
     pass
 
 
+class SpiderDoesNotExist(ScrapydClientException):
+    pass
+
+
 class HTTPException(ScrapydClientException):
     """Basic HTTP exception"""
     pass

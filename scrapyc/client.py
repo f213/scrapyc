@@ -38,6 +38,25 @@ class ScrapydClient:
         for spider in response.get('spiders', []):
             yield spider
 
+    def schedule(self, project: str, spider: str):
+        """Schedule a job for given project and spider"""
+        response = self.post('schedule', data=dict(
+            project=project,
+            spider=spider,
+        ))
+        try:
+            self._assert_status_is_ok(response)
+        except exceptions.ResponseNotOKException as e:
+            if 'no active project' in str(e):
+                raise exceptions.ProjectDoesNotExist('Project %s does not exist' % project)
+
+            if ': spider' in str(e) and str(e).endswith('not found'):
+                raise exceptions.SpiderDoesNotExist('Spider %s does not exist' % spider)
+
+            raise
+
+        return response
+
     def _format_url(self, endpoint: str) -> str:
         """Append the API host"""
         return (self.host + '/%s.json' % endpoint).replace('//', '/').replace(':/', '://')
