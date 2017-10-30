@@ -1,4 +1,5 @@
 from typing import Generator
+from urllib.parse import urljoin
 
 import requests
 from requests.auth import HTTPBasicAuth
@@ -38,7 +39,7 @@ class ScrapydClient:
         for spider in response.get('spiders', []):
             yield spider
 
-    def schedule(self, project: str, spider: str):
+    def schedule(self, project: str, spider: str) -> dict:
         """Schedule a job for given project and spider"""
         response = self.post('schedule', data=dict(
             project=project,
@@ -57,9 +58,13 @@ class ScrapydClient:
 
         return response
 
+    def get_log_link(self, project: str, spider: str, job: str) -> str:
+        """Build a link to the log for a given project, spider and job"""
+        return urljoin(self.host, '/'.join(['logs', project, spider, job]) + '.log')
+
     def _format_url(self, endpoint: str) -> str:
         """Append the API host"""
-        return (self.host + '/%s.json' % endpoint).replace('//', '/').replace(':/', '://')
+        return urljoin(self.host, '%s.json' % endpoint)
 
     def get(self, url: str, **kwargs) -> dict:
         """Do a GET request"""

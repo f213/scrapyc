@@ -12,6 +12,10 @@ def test_format_url(input, formatted, client: ScrapydClient):
     assert client._format_url(input) == formatted
 
 
+def test_get_log_link(client: ScrapydClient):
+    assert client.get_log_link('project', 'spider', '100500') == 'https://api.host.com:6800/logs/project/spider/100500.log'
+
+
 def test_get(mocked_http_client: ScrapydClient):
     mocked_http_client.m.get('https://api.host.com:6800/schedule.json', json={'status': 'ok'})
     assert mocked_http_client.get('schedule') == {'status': 'ok'}
