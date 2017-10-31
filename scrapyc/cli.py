@@ -1,13 +1,14 @@
 from urllib.parse import urlparse
 
 import click
+import six
 
-from scrapyc import ScrapydClient
+from scrapyc import ScrapydClient, exceptions
 
 
 def validate_url(ctx, param, value):
     if value is None:
-        raise click.UsageError('Please supply a crapyd URL (e.g. --url http://localhost:6800)')
+        raise click.UsageError('Please supply a crapyd URL (e.g. --url http://localhost:6800), or use SCRAPYC_URL environment variable')
 
     parsed = urlparse(value)
     if not len(parsed.scheme) or not len(parsed.netloc):
@@ -24,6 +25,11 @@ def validate_url(ctx, param, value):
 def cli(ctx, url, username=None, password=None):
     ctx.obj['client'] = ScrapydClient(url, username, password)
 
+    try:
+        ctx.obj['client'].get_status()
+    except exceptions.UnAuthorizedException:
+        raise click.ClickException('Got 401 error during query to %s, please double-check username and password.' % url)
+
 
 @cli.command(short_help='Run a project')
 @click.argument('project', type=click.STRING)
@@ -31,6 +37,24 @@ def cli(ctx, url, username=None, password=None):
 @click.pass_context
 def schedule(ctx, project, spider):
     ctx.obj['client'].schedule(project, spider)
+
+
+@cli.command(short_help='Get daemon status')
+@click.pass_context
+def status(ctx):
+    status = ctx.obj['client'].get_status()
+
+    node_name = status.pop('node_name')
+    st = status.pop('status')
+    click.echo('Scrapyd node name: ', nl=False)
+    click.secho(node_name, fg='blue', nl=False)
+    click.echo(', status: ', nl=False)
+    click.secho(st.upper(), fg='green')
+    click.echo()
+
+    for key, value in six.iteritems(status):
+        click.echo(key.title() + ': ', nl=False)
+        click.secho(str(value), fg='green')
 
 
 def main():

@@ -1,3 +1,4 @@
+from collections import OrderedDict
 from typing import Generator
 from urllib.parse import urljoin
 
@@ -17,6 +18,13 @@ class ScrapydClient:
             self.auth = HTTPBasicAuth(username, password)
         else:
             self.auth = None
+
+    def get_status(self) -> OrderedDict:
+        """Get scrapyd status"""
+        response = self.get('daemonstatus')
+        self._assert_status_is_ok(response)
+
+        return OrderedDict(response.items())
 
     def list_projects(self) -> Generator[str, None, None]:
         """List projects uploaded to scrapyd"""

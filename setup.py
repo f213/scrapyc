@@ -13,6 +13,7 @@ setup(
     install_requires=[
         'requests',
         'Click',
+        'colorama',
     ],
     entry_points="""
         [console_scripts]

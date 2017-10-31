@@ -3,6 +3,12 @@ import pytest
 from scrapyc import ScrapydClient, exceptions
 
 
+def test_status(mocked_http_client: ScrapydClient, response):
+    mocked_http_client.m.get('https://api.host.com:6800/daemonstatus.json', json=response('daemonstatus'))
+    got = mocked_http_client.get_status()
+    assert got['node_name'] == '8f3b385b77dc'
+
+
 def test_list_projects(mocked_http_client: ScrapydClient, response):
     mocked_http_client.m.get('https://api.host.com:6800/listprojects.json', json=response('listprojects'))
 
