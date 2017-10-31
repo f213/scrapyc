@@ -6,7 +6,6 @@ import requests_mock
 import simplejson as json
 from click.testing import CliRunner
 
-from scrapyc import cli as app
 from scrapyc import ScrapydClient
 
 
@@ -41,10 +40,8 @@ def response() -> Callable[[str], dict]:
 @pytest.fixture
 def runner() -> CliRunner:
     """Click test runner"""
-    return CliRunner()
-
-
-@pytest.fixture
-def cli() -> app:
-    """Instance of CLI for testing"""
-    return app
+    return CliRunner(env=dict(
+        SCRAPYC_URL='https://api.host.com:6800',
+        SCRAPYC_USERNAME='r00t',
+        SCRAPYC_PASSWORD='pass',
+    ))
