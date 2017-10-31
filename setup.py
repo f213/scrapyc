@@ -12,7 +12,12 @@ setup(
     packages=find_packages(),
     install_requires=[
         'requests',
+        'Click',
     ],
+    entry_points="""
+        [console_scripts]
+        scrapyc = scrapyc.cli:main
+    """,
     include_package_data=True,
     zip_safe=False,
 )
