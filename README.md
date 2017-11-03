@@ -1,6 +1,7 @@
 # scrapyc
 [![Build Status](https://travis-ci.org/f213/scrapyc.svg?branch=master)](https://travis-ci.org/f213/scrapyc)
 [![codecov](https://codecov.io/gh/f213/scrapyc/branch/master/graph/badge.svg)](https://codecov.io/gh/f213/scrapyc)
+[![PyPI version](https://badge.fury.io/py/scrapyc.svg)](https://badge.fury.io/py/scrapyc)
 
 Scrapyc is a command line interface and client library for a [scrapyd](https://scrapyd.readthedocs.io/en/stable/). Despite already existing
 [scrapyd-client](https://github.com/scrapy/scrapyd-client) this client just works and has been well-tested.
