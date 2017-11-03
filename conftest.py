@@ -20,10 +20,11 @@ def client() -> ScrapydClient:
 
 
 @pytest.fixture
-def mocked_http_client(client) -> ScrapydClient:
+def mocked_http_client(client, response) -> ScrapydClient:
     """Client with blocked requests and requests_mock injected to .m"""
     with requests_mock.Mocker() as m:
         client.m = m
+        client.m.get('https://api.host.com:6800/daemonstatus.json', json=response('daemonstatus'))
         yield client
 
 

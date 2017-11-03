@@ -36,7 +36,17 @@ def cli(ctx, url, username=None, password=None):
 @click.option('--spider', default='spider', type=click.STRING, help='(Optional) spider name')
 @click.pass_context
 def schedule(ctx, project, spider):
-    ctx.obj['client'].schedule(project, spider)
+    try:
+        response = ctx.obj['client'].schedule(project, spider)
+    except exceptions.ProjectDoesNotExist:
+        raise click.ClickException('Given project «%s» does not exist on %s' % (project, ctx.obj['client'].host))
+    except exceptions.SpiderDoesNotExist:
+        raise click.ClickException('Given spider «%s» is not present in the project %s' % (spider, project))
+
+    log_link = ctx.obj['client'].get_log_link(project, spider, response['jobid'])
+
+    click.secho('OK', fg='green', nl=False)
+    click.echo(', %s' % log_link)
 
 
 @cli.command(short_help='Get daemon status')
