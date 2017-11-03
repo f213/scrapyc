@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from scrapyc import cli
 
 
@@ -21,11 +22,11 @@ def test_unknown_project_when_scheduling(mocked_http_client, response, runner):
     mocked_http_client.m.post('https://api.host.com:6800/schedule.json', json=response('project_does_not_exist'))
     result = runner.invoke(cli.schedule, ['testprj'], obj=dict(client=mocked_http_client))
 
-    assert '«testprj» does not exist' in result.output
+    assert '"testprj" does not exist' in result.output
 
 
 def test_unknown_spider_when_scheduling(mocked_http_client, response, runner):
     mocked_http_client.m.post('https://api.host.com:6800/schedule.json', json=response('spider_does_not_exist'))
     result = runner.invoke(cli.schedule, ['testprj'], obj=dict(client=mocked_http_client))
 
-    assert '«spider» is not present in the project' in result.output
+    assert '"spider" is not present in the project' in result.output

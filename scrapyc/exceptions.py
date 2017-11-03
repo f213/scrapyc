@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 class ScrapydClientException(BaseException):
     """Generic client exception"""
     pass

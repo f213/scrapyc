@@ -1,5 +1,4 @@
 from os import path
-from typing import Callable
 
 import pytest
 import requests_mock
@@ -10,7 +9,7 @@ from scrapyc import ScrapydClient
 
 
 @pytest.fixture
-def client() -> ScrapydClient:
+def client():
     """Configured instance of scrapyc"""
     return ScrapydClient(
         host='https://api.host.com:6800',
@@ -20,7 +19,7 @@ def client() -> ScrapydClient:
 
 
 @pytest.fixture
-def mocked_http_client(client, response) -> ScrapydClient:
+def mocked_http_client(client, response):
     """Client with blocked requests and requests_mock injected to .m"""
     with requests_mock.Mocker() as m:
         client.m = m
@@ -29,7 +28,7 @@ def mocked_http_client(client, response) -> ScrapydClient:
 
 
 @pytest.fixture
-def response() -> Callable[[str], dict]:
+def response():
     """Fixture reader"""
     def read_file(f):
         with open(path.join('tests/fixtures/', f) + '.json') as fp:
@@ -39,7 +38,7 @@ def response() -> Callable[[str], dict]:
 
 
 @pytest.fixture
-def runner() -> CliRunner:
+def runner():
     """Click test runner"""
     return CliRunner(env=dict(
         SCRAPYC_URL='https://api.host.com:6800',

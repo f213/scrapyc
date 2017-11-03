@@ -1,4 +1,8 @@
-from urllib.parse import urlparse
+# -*- coding: utf-8 -*-
+try:
+    from urllib.parse import urlparse
+except ImportError:
+    import urlparse
 
 import click
 import six
@@ -39,9 +43,9 @@ def schedule(ctx, project, spider):
     try:
         response = ctx.obj['client'].schedule(project, spider)
     except exceptions.ProjectDoesNotExist:
-        raise click.ClickException('Given project «%s» does not exist on %s' % (project, ctx.obj['client'].host))
+        raise click.ClickException('Given project "%s" does not exist on %s' % (project, ctx.obj['client'].host))
     except exceptions.SpiderDoesNotExist:
-        raise click.ClickException('Given spider «%s» is not present in the project %s' % (spider, project))
+        raise click.ClickException('Given spider "%s" is not present in the project %s' % (spider, project))
 
     log_link = ctx.obj['client'].get_log_link(project, spider, response['jobid'])
 
