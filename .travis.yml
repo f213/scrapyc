@@ -3,7 +3,14 @@ python:
     - 2.7
     - 3.5
     - 3.6
-
 script: py.test --cov=./
 after_success:
-      - bash <(curl -s https://codecov.io/bash)
+    - bash <(curl -s https://codecov.io/bash)
+deploy:
+  provider: pypi
+  on:
+      tags: true
+
+  user: f213
+  password:
+    secure: cil7FxjlnZX244pzMvAxRnFmTtwWSQMqqwXVhrGD3C13ZOBq6qEewjNujBrJFX6Yh4OAU1ao7mDMua+oLCcVRVP4/7cCSofYuZJ1A2vU3+9uCanbmlABhpduq0NPOkRBlxdUgqRW2IKSi730kIUZo4ukxCYDLCXLxYScEUHmNxfb48peWsLEuJB3zQfIhqSE8w536JJYSs2zGeDHYyA7WenVdi4cQmfjIbv91IaslHM697XoWTDu+v8lAuXp2BeuNZHBykxdxCPgj1cWYf6Hlv/uA6ll2RAZ/t1FQF9qOim9BlTmWL3GP982L5tlmsScH9dpfeoKDjxXahghsRN1SQtcd0PnzWypD4vNZS51WhK6/3gj99KJug9BzAM4+dLnk6OfD6uCbvP6MrdSobz35GmVOgXoQ4RsIW43gZTkHx1TA3TXCFssPKEvdatDwSwOBqZvPjaxDkgklH95Xi7gjrEk+n0Hih7ey5NdlEC2kA0jYD6mBTHGQGVDBcg/ypnWAp2ZElu6Ln2dDEOeWw4lzwT6j+jL/cxguAIFsBFOpVom8eczrLb9Y4d998jQkbKzcS09mnCB0XZSIXosXQ/VemqzG2mrXHKSGghlczZAeL5tXwdP/JIlCOUvBG9trKqLRk3A6MdEXPwg8LLVWLf81fZ2MVfMV63KQwytX2vQkoM=
