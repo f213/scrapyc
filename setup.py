@@ -2,7 +2,7 @@ from setuptools import find_packages, setup
 
 setup(
     name='scrapyc',
-    version='0.0.2',
+    version='0.0.4',
     description="Simple client to scrapyd. Done right.",
     keywords=[],
     url="https://github.com/f213/scrapyd-client/",
