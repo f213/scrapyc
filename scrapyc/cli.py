@@ -53,6 +53,26 @@ def schedule(ctx, project, spider):
     click.echo(', %s' % log_link)
 
 
+@cli.command(short_help='List spiders')
+@click.argument('project', type=click.STRING)
+@click.pass_context
+def spiders(ctx, project):
+    try:
+        spiders = list(ctx.obj['client'].list_spiders(project))
+    except exceptions.ProjectDoesNotExist:
+        raise click.ClickException('Given project "%s" does not exist on %s' % (project, ctx.obj['client'].host))
+
+    for spider in spiders:
+        click.echo(spider)
+
+
+@cli.command(short_help='List projects')
+@click.pass_context
+def projects(ctx):
+    for project in ctx.obj['client'].list_projects():
+        click.echo(project)
+
+
 @cli.command(short_help='Get daemon status')
 @click.pass_context
 def status(ctx):

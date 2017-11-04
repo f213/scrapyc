@@ -43,3 +43,24 @@ def test_url_validator_with_empty_url():
 def test_url_validator_with_malformed_url():
     with pytest.raises(click.BadParameter):
         cli.validate_url(None, None, 'ev1l')
+
+
+def test_list_projects(mocked_http_client, response, runner):
+    mocked_http_client.m.get('https://api.host.com:6800/listprojects.json', json=response('listprojects'))
+    result = runner.invoke(cli.projects, obj=dict(client=mocked_http_client))
+
+    assert 'etaloninvest' in result.output
+
+
+def test_list_spiders_ok(mocked_http_client, response, runner):
+    mocked_http_client.m.get('https://api.host.com:6800/listspiders.json', json=response('listspiders'))
+    result = runner.invoke(cli.spiders, ['prj'], obj=dict(client=mocked_http_client))
+
+    assert 'spider1' in result.output
+
+
+def test_list_spiders_for_wrong_project(mocked_http_client, response, runner):
+    mocked_http_client.m.get('https://api.host.com:6800/listspiders.json', json=response('project_does_not_exist'))
+    result = runner.invoke(cli.spiders, ['prj'], obj=dict(client=mocked_http_client))
+
+    assert '"prj" does not exist' in result.output
