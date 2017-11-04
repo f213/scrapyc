@@ -2,7 +2,7 @@
 try:
     from urllib.parse import urlparse
 except ImportError:
-    import urlparse
+    from urlparse import urlparse
 
 import click
 import six

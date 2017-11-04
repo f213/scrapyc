@@ -1,4 +1,7 @@
 # -*- coding: utf-8 -*-
+import click
+import pytest
+
 from scrapyc import cli
 
 
@@ -30,3 +33,13 @@ def test_unknown_spider_when_scheduling(mocked_http_client, response, runner):
     result = runner.invoke(cli.schedule, ['testprj'], obj=dict(client=mocked_http_client))
 
     assert '"spider" is not present in the project' in result.output
+
+
+def test_url_validator_with_empty_url():
+    with pytest.raises(click.UsageError):
+        cli.validate_url(None, None, None)
+
+
+def test_url_validator_with_malformed_url():
+    with pytest.raises(click.BadParameter):
+        cli.validate_url(None, None, 'ev1l')
